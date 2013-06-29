@@ -1,5 +1,14 @@
 require "auto_demeter/version"
+require 'auto_demeter/methods'
 
-module AutoDemeter
-  # Your code goes here...
+class ActiveRecord::Base
+  include AutoDemeter
+end
+
+class ActiveRecord::Associations::BelongsToAssociation
+  include AutoDemeter
+end
+
+class ActiveRecord::Associations::HasOneAssociation
+  include AutoDemeter
 end
