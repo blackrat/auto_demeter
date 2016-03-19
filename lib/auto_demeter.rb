@@ -1,14 +1,5 @@
-require "auto_demeter/version"
-require 'auto_demeter/methods'
-
-class ActiveRecord::Base
-  include AutoDemeter
-end
-
-class ActiveRecord::Associations::BelongsToAssociation
-  include AutoDemeter
-end
-
-class ActiveRecord::Associations::HasOneAssociation
-  include AutoDemeter
-end
+require (File.join(File.dirname(__FILE__), 'auto_demeter', 'version'))
+require (File.join(File.dirname(__FILE__), 'auto_demeter', 'methods'))
+ActiveRecord::Base.send :include, AutoDemeter
+ActiveRecord::Associations::BelongsToAssociation.send :include, AutoDemeter
+ActiveRecord::Associations::HasOneAssociation.send :include, AutoDemeter
