@@ -17,7 +17,11 @@ module AutoDemeter
   def respond_through_association?(method_id)
     if children_names && (match_data=method_id.to_s.match(reflected_children_regex)) && match_data[1].present?
       association_name=self.methods.include?(match_data[1]) ? match_data[1] : "#{self.class.name.underscore}_#{match_data[1]}"
-      send(association_name) ? true : match_data[2][0..2] == 'is_'
+      begin
+        send(association_name) ? true : match_data[2][0..2] == 'is_'
+      rescue
+        false
+      end
     else
       false
     end
@@ -31,13 +35,17 @@ module AutoDemeter
   def method_missing(method_id, *args, &block)
     begin
       super
-    rescue NoMethodError, NameError
+    rescue NoMethodError, NameError => e
       if match_data=method_id.to_s.match(reflected_children_regex)
         association_name=self.respond_to?(match_data[1]) ? match_data[1] : "#{self.class.name.underscore}_#{match_data[1]}"
-        if association=send(association_name)
-          association.send(match_data[2], *args, &block)
-        else
-          match_data[2][0..2] == 'is_' ? match_data[2][3..6] == 'not_' : nil
+        begin
+          if association=send(association_name)
+            association.send(match_data[2], *args, &block)
+          else
+            match_data[2][0..2] == 'is_' ? match_data[2][3..6] == 'not_' : nil
+          end
+        rescue Exception
+          raise e
         end
       else
         raise
