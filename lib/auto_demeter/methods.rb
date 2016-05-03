@@ -18,7 +18,11 @@ module AutoDemeter
     if children_names && (match_data=method_id.to_s.match(reflected_children_regex)) && match_data[1].present?
       association_name=self.methods.include?(match_data[1]) ? match_data[1] : "#{self.class.name.underscore}_#{match_data[1]}"
       begin
-        send(association_name) && send(association_name).respond_to?(match_data[2]) ? true : match_data[2][0..2] == 'is_'
+        if association=send(association_name)
+          association.respond_to?(match_data[2])
+        else
+          match_data[2][0..2] == 'is_'
+        end
       rescue
         false
       end
