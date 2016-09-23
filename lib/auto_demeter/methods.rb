@@ -17,7 +17,7 @@ module AutoDemeter
   public
   def respond_through_association?(method_id)
     if children_names && (match_data=method_id.to_s.match(reflected_children_regex)) && match_data[1].present?
-      association_name=self.methods.include?(match_data[1]) ? match_data[1] : "#{self.class.name.underscore}_#{match_data[1]}"
+      association_name=(self.methods.include?(match_data[1].intern) || self.methods.include?(match_data[1])) ? match_data[1] : "#{self.class.name.underscore}_#{match_data[1]}"
       begin
         if association=send(association_name)
           association.respond_to?(match_data[2])
