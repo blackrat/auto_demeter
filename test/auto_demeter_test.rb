@@ -74,5 +74,7 @@ end)
     assert_equal @paul.name, @luke_address.user_manager_name
     assert_equal @paul.name, @luke_address.user_manager.name
     assert_equal @paul.name, @luke_address.user.manager_name
+    @luke.address=nil
+    assert @luke.respond_to?(:address_postcode)
   end
 end

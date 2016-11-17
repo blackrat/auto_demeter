@@ -21,6 +21,8 @@ module AutoDemeter
       begin
         if association=send(association_name)
           association.respond_to?(match_data[2])
+        elsif association.nil?
+          association_name.camelize.constantize.new.respond_to?(match_data[2])
         else
           match_data[2][0..2] == 'is_'
         end
