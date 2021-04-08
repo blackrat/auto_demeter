@@ -52,8 +52,3 @@ without having to define manager_name on the association.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-## Todo
-
-1. Tests
-2. More tests around the is and is_not mechanism
-3. Potentially deprecate the is and is_not mechanism which should really be handled in a different gem.
